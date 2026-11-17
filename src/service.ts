@@ -1925,7 +1925,7 @@ export class ArenaService {
       if (!this.within(work.cwd, target)) throw new Error(`path is outside your writable workspace: ${path}`)
       return target
     }
-    const arenaRoot = join(tmpdir(), "opencode-arena")
+    const arenaRoot = join(tmpdir(), "arena")
     if (
       !this.within(work.cwd, target) &&
       !this.within(work.sharedRoot, target) &&

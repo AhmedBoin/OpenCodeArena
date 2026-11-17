@@ -21,7 +21,7 @@ export function runLockPath(runID: string): string {
   // The key can be a run or a run-scoped resource (`run:file:src/app.ts`).
   // Encode it so a separator or drive letter cannot escape the lock directory.
   const safe = encodeURIComponent(runID).replace(/%/g, "_").replace(/\*/g, "_2A").slice(0, 180)
-  return join(tmpdir(), "opencode-arena", "locks", `${safe}.lock`)
+  return join(tmpdir(), "arena", "locks", `${safe}.lock`)
 }
 
 /** A lock key for one resource inside a field. */
@@ -31,7 +31,7 @@ export function resourceLockKey(runID: string, resource: string): string {
 
 export async function withRunLock<T>(runID: string, fn: () => Promise<T>, timeoutMs = 30_000, ttlMs = 30 * 60_000): Promise<T> {
   const path = runLockPath(runID)
-  await mkdir(join(tmpdir(), "opencode-arena", "locks"), { recursive: true })
+  await mkdir(join(tmpdir(), "arena", "locks"), { recursive: true })
   const started = Date.now()
   for (;;) {
     try {

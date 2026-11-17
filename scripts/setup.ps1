@@ -24,7 +24,17 @@ $skills = Join-Path $config "skills"
 New-Item -ItemType Directory -Force -Path $plugins | Out-Null
 New-Item -ItemType Directory -Force -Path $skills | Out-Null
 
-$install = Join-Path $plugins "arena-field"
+# Preserve the one-time Windows Git download under the new name.
+if ($env:LOCALAPPDATA) {
+  $legacyTools = Join-Path $env:LOCALAPPDATA "opencode-arena"
+  $newTools = Join-Path $env:LOCALAPPDATA "arena"
+  if ((Test-Path -LiteralPath $legacyTools) -and -not (Test-Path -LiteralPath $newTools)) {
+    Move-Item -LiteralPath $legacyTools -Destination $newTools
+    Write-Host "Moved the Git tools cache to $newTools"
+  }
+}
+
+$install = Join-Path $plugins "arena"
 if (Test-Path -LiteralPath $install) {
   $item = Get-Item -LiteralPath $install -Force
   if ($item.LinkType -eq "Junction" -or $item.LinkType -eq "SymbolicLink") {
@@ -35,7 +45,7 @@ if (Test-Path -LiteralPath $install) {
   if (Test-Path -LiteralPath $install) {
     $backups = Join-Path $config "arena-install-backups"
     New-Item -ItemType Directory -Force -Path $backups | Out-Null
-    $backup = Join-Path $backups ("arena-field-" + (Get-Date -Format "yyyyMMddHHmmss"))
+    $backup = Join-Path $backups ("arena-" + (Get-Date -Format "yyyyMMddHHmmss"))
     Move-Item -LiteralPath $install -Destination $backup -Force
     Write-Host "The old install could not be removed and was moved to $backup" -ForegroundColor Yellow
   }
@@ -73,6 +83,13 @@ try {
 
 Copy-Item -Path (Join-Path $install "skills\arena") -Destination $skills -Recurse -Force
 
+$legacy = Join-Path $plugins "arena-field"
+if (Test-Path -LiteralPath $legacy) {
+  Write-Host ""
+  Write-Host "Legacy install found at $legacy." -ForegroundColor Yellow
+  Write-Host "Update $config\opencode.json to './plugins/arena', then remove the legacy folder."
+}
+
 Write-Host ""
 Write-Host "Plugin installed at: $install" -ForegroundColor Green
 Write-Host "Source repo:        $repo (not used at runtime)"
@@ -80,6 +97,6 @@ Write-Host "This is a real copy, not a link to the Desktop folder."
 Write-Host "To update: git pull in the source, then run this script again."
 Write-Host ""
 Write-Host "Add this entry to $config\opencode.json:" -ForegroundColor Cyan
-Write-Host '  "plugins": ["./plugins/arena-field"]'
+Write-Host '  "plugins": ["./plugins/arena"]'
 Write-Host ""
 Write-Host "Restart OpenCode. The arena tools and the Arena tab will load from the OpenCode copy."

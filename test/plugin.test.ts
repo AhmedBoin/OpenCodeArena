@@ -374,7 +374,7 @@ describe("arena plugin", () => {
   test("uses the project directory, not a seat worktree, as the service key", async () => {
     resetCache()
     const { ctx } = mockContext()
-    ctx.location.directory = join(tmpdir(), "opencode-arena", "run", "Ada")
+    ctx.location.directory = join(tmpdir(), "arena", "run", "Ada")
     await plugin.setup(ctx as never)
     expect(cached(process.cwd())).toBeTruthy()
   })

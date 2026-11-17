@@ -1,4 +1,4 @@
-# opencode-arena
+# Arena
 
 A continuous multi-agent field for OpenCode: named agents work one goal at the
 same time, negotiate in a shared room, and Vera the referee watches for stalls.
@@ -109,18 +109,18 @@ Either way, add the plugin to the whole-workstation config once, in
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugins": ["./plugins/arena-field"]
+  "plugins": ["./plugins/arena"]
 }
 ```
 
-The setup script installs a real copy at `plugins/arena-field`; the source clone
+The setup script installs a real copy at `plugins/arena`; the source clone
 is not used at runtime, so the Desktop folder can move or be deleted. To update,
 `git pull` in the source and run the setup script again.
 
 If you prefer an absolute path, point `plugins` at the installed copy, for example
-`["C:/Users/<you>/.config/opencode/plugins/arena-field"]` or
-`["/home/<you>/.config/opencode/plugins/arena-field"]`. On OpenCode builds that
-include the plugin command, `opencode plugin add "/path/to/opencode-arena"`
+`["C:/Users/<you>/.config/opencode/plugins/arena"]` or
+`["/home/<you>/.config/opencode/plugins/arena"]`. On OpenCode builds that
+include the plugin command, `opencode plugin add "/path/to/arena"`
 installs the source clone instead, which is fine for development.
 
 For one project only, use the absolute path to the installed copy in that

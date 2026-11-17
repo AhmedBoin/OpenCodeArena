@@ -31,7 +31,7 @@ async function works(candidate: string): Promise<boolean> {
 }
 
 function toolsRoot(): string {
-  return join(process.env.LOCALAPPDATA ?? join(homedir(), "AppData", "Local"), "opencode-arena", "tools", "git")
+  return join(process.env.LOCALAPPDATA ?? join(homedir(), "AppData", "Local"), "arena", "tools", "git")
 }
 
 async function findDownloaded(): Promise<string | undefined> {
@@ -49,7 +49,7 @@ async function findDownloaded(): Promise<string | undefined> {
 }
 
 async function downloadWindowsGit(): Promise<string> {
-  const headers = { "User-Agent": "opencode-arena", Accept: "application/vnd.github+json" }
+  const headers = { "User-Agent": "arena", Accept: "application/vnd.github+json" }
   let url: string | undefined
   try {
     const response = await fetch("https://api.github.com/repos/git-for-windows/git/releases/latest", { headers })
@@ -70,7 +70,7 @@ async function downloadWindowsGit(): Promise<string> {
   await rm(extract, { recursive: true, force: true })
   await mkdir(extract, { recursive: true })
 
-  const response = await fetch(url, { headers: { "User-Agent": "opencode-arena" } })
+  const response = await fetch(url, { headers: { "User-Agent": "arena" } })
   if (!response.ok) throw new Error(`Git is not installed and the portable download failed (${response.status}).`)
   const data = Buffer.from(await response.arrayBuffer())
   await (await import("node:fs/promises")).writeFile(zip, data)

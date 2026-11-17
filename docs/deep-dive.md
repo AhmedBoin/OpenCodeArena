@@ -12,7 +12,7 @@ The short version:
 - Every public arena plugin I checked targets the 1.x API. The 2.x API changed the package name, the config key, the tool registration path, and the event payload shape. Copying 1.x code will not load.
 - The hard parts are not orchestration. They are verification, isolation, and stopping rules.
 
-A working implementation ships beside this document in `opencode-arena/`.
+A working implementation ships beside this document in `arena/`.
 
 ## 1. Separate the three claims
 
@@ -355,7 +355,7 @@ A judge can reject every candidate, and should when the success criteria are unm
 
 ## 11. What is implemented, and what was verified
 
-The package in `opencode-arena/`:
+The package in `arena/`:
 
 | File | Responsibility |
 |---|---|
@@ -391,7 +391,7 @@ Not verified, and stated as such:
 1. Install dependencies once:
 
    ```sh
-   cd /path/to/opencode-arena
+   cd /path/to/arena
    bun install
    ```
 
@@ -400,7 +400,7 @@ Not verified, and stated as such:
    ```jsonc
    {
      "$schema": "https://opencode.ai/config.json",
-     "plugins": ["/path/to/opencode-arena"]
+     "plugins": ["/path/to/arena"]
    }
    ```
 

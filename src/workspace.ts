@@ -167,9 +167,9 @@ export class WorkspaceManager {
     if (!useWorktrees) return { label, path: root, isolated: false }
     if (this.unsafeRoot(root)) return { label, path: root, isolated: false }
     const repo = await this.ensureRepo(root, runID)
-    const directory = join(tmpdir(), "opencode-arena", runID, label)
+    const directory = join(tmpdir(), "arena", runID, label)
     const branch = `arena/${runID}/${label}`
-    await mkdir(join(tmpdir(), "opencode-arena", runID), { recursive: true })
+    await mkdir(join(tmpdir(), "arena", runID), { recursive: true })
     const result = await this.git(
       [
         "-c",
@@ -254,8 +254,8 @@ export class WorkspaceManager {
     if (await this.initRepository(root)) return { root, shadow: false }
     const existing = this.shadowRepos.get(runID)
     if (existing) return { root: existing, shadow: true }
-    const shadow = join(tmpdir(), "opencode-arena", "repos", runID, "repo")
-    await mkdir(join(tmpdir(), "opencode-arena", "repos", runID), { recursive: true })
+    const shadow = join(tmpdir(), "arena", "repos", runID, "repo")
+    await mkdir(join(tmpdir(), "arena", "repos", runID), { recursive: true })
     await copyForShadow(root, shadow)
     const init = await this.git(["-C", shadow, "init"], shadow, 30_000)
     if (init.code !== 0) throw new Error(`git init failed: ${trim(init.stderr, 2_000)}`)
@@ -285,7 +285,7 @@ export class WorkspaceManager {
   }
 
   async cleanupRun(runID: string): Promise<void> {
-    const shadow = this.shadowRepos.get(runID) ?? join(tmpdir(), "opencode-arena", "repos", runID, "repo")
+    const shadow = this.shadowRepos.get(runID) ?? join(tmpdir(), "arena", "repos", runID, "repo")
     this.shadowRepos.delete(runID)
     await rm(shadow, { recursive: true, force: true }).catch(() => undefined)
   }
@@ -375,7 +375,7 @@ export class WorkspaceManager {
     const targetChanged = new Set(await this.changedFiles(target))
     const merged: string[] = []
     const conflicts: string[] = []
-    const work = join(tmpdir(), "opencode-arena", "merge", `${Date.now()}-${Math.random().toString(36).slice(2)}`)
+    const work = join(tmpdir(), "arena", "merge", `${Date.now()}-${Math.random().toString(36).slice(2)}`)
     await mkdir(work, { recursive: true })
     try {
       for (const path of changed) {

@@ -186,7 +186,7 @@ describe("WorkspaceManager", () => {
       await workspace.remove(root, created)
     } finally {
       await rm(root, { recursive: true, force: true }).catch(() => undefined)
-      await rm(join(tmpdir(), "opencode-arena", runID), { recursive: true, force: true }).catch(() => undefined)
+      await rm(join(tmpdir(), "arena", runID), { recursive: true, force: true }).catch(() => undefined)
     }
   }, 30_000)
 })

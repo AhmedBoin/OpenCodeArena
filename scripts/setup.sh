@@ -18,7 +18,7 @@ plugins="$config/plugins"
 skills="$config/skills"
 mkdir -p "$plugins" "$skills"
 
-install="$plugins/arena-field"
+install="$plugins/arena"
 if [ -L "$install" ]; then
   rm "$install"
 elif [ -e "$install" ]; then
@@ -26,7 +26,7 @@ elif [ -e "$install" ]; then
 fi
 if [ -e "$install" ]; then
   mkdir -p "$config/arena-install-backups"
-  backup="$config/arena-install-backups/arena-field-$(date +%Y%m%d%H%M%S)"
+  backup="$config/arena-install-backups/arena-$(date +%Y%m%d%H%M%S)"
   mv "$install" "$backup"
   echo "The old install could not be removed and was moved to $backup" >&2
 fi
@@ -46,6 +46,12 @@ bun run build:gui
 
 cp -R "$install/skills/arena" "$skills/"
 
+legacy="$plugins/arena-field"
+if [ -e "$legacy" ]; then
+  echo "Legacy install found at $legacy." >&2
+  echo "Update $config/opencode.json to './plugins/arena', then remove the legacy folder." >&2
+fi
+
 echo
 echo "Plugin installed at: $install"
 echo "Source repo:        $repo (not used at runtime)"
@@ -53,6 +59,6 @@ echo "This is a real copy, not a link to the source folder."
 echo "To update: git pull in the source, then run this script again."
 echo
 echo "Add this entry to $config/opencode.json:"
-echo '  "plugins": ["./plugins/arena-field"]'
+echo '  "plugins": ["./plugins/arena"]'
 echo
 echo "Restart OpenCode. The arena tools and the Arena tab will load from the OpenCode copy."

@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "opencode-arena",
+      "name": "arena",
       "devDependencies": {
         "@opencode/plugin": "2.2.7",
         "@types/bun": "latest",

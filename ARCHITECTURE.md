@@ -205,7 +205,7 @@ Arena is a plugin, not a standalone model server. The folder does not contain:
   and the room work without the tab.
 
 Everything the Arena plugin itself needs is in this repo. The setup script copies
-the runtime into OpenCode at `~/.config/opencode/plugins/arena-field`, installs its
+the runtime into OpenCode at `~/.config/opencode/plugins/arena`, installs its
 dependencies and builds the tab there. The clone is the source, not the runtime;
 moving or deleting the clone does not break the installed copy.
 
