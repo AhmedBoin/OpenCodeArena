@@ -1,0 +1,37 @@
+{
+  "name": "opencode-arena",
+  "version": "0.5.0",
+  "description": "Continuous multi-agent Arena field for OpenCode: named peers, a shared safe-point bus, permanent leave seals, and a verification-gated claim",
+  "type": "module",
+  "module": "src/plugin.ts",
+  "private": true,
+  "exports": {
+    ".": "./src/plugin.ts",
+    "./gui-experimental": "./dist/gui-experimental.cjs"
+  },
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "build:gui": "vite build",
+    "setup": "bun install && bun run build:gui"
+  },
+  "engines": {
+    "bun": ">=1.2.0"
+  },
+  "devDependencies": {
+    "@opencode/plugin": "2.2.7",
+    "@types/bun": "latest",
+    "solid-js": "1.9.17",
+    "typescript": "^7",
+    "vite": "7.3.7",
+    "vite-plugin-solid": "2.11.10"
+  },
+  "peerDependencies": {
+    "@opencode/plugin": ">=2.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@opencode/plugin": {
+      "optional": true
+    }
+  }
+}
