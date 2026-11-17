@@ -1,3 +1,7 @@
+param(
+  [string]$ConfigDir = (Join-Path $env:USERPROFILE ".config\opencode")
+)
+
 $ErrorActionPreference = "Stop"
 
 $repo = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
@@ -27,7 +31,7 @@ try {
   Pop-Location
 }
 
-$config = Join-Path $env:USERPROFILE ".config\opencode"
+$config = $ConfigDir
 $plugins = Join-Path $config "plugins"
 $skills = Join-Path $config "skills"
 New-Item -ItemType Directory -Force -Path $plugins | Out-Null
