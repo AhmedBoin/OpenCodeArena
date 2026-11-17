@@ -90,14 +90,8 @@ OpenCode for the Arena tab. Git is used for worktrees and merges; on Windows the
 plugin downloads official MinGit automatically if git is not already installed.
 No MCP server, no Python, no Docker and no agent file is required.
 
-```sh
-cd /path/to/opencode-arena
-bun install
-bun run build:gui
-```
-
-The setup scripts do the install, the GUI build, the skill copy and the plugin
-link in one step:
+The setup script installs a self-contained copy into OpenCode, builds the tab
+there, and copies the skill:
 
 ```powershell
 # Windows PowerShell
@@ -119,21 +113,27 @@ Either way, add the plugin to the whole-workstation config once, in
 }
 ```
 
-The setup script creates the `plugins/arena-field` link. If you prefer an
-absolute path, point `plugins` at the clone instead, for example
-`["/path/to/opencode-arena"]`. On OpenCode builds that include the plugin command,
-`opencode plugin add "/path/to/opencode-arena"` is an alternative.
+The setup script installs a real copy at `plugins/arena-field`; the source clone
+is not used at runtime, so the Desktop folder can move or be deleted. To update,
+`git pull` in the source and run the setup script again.
 
-For one project only, use the absolute path to the clone in that project's
-`opencode.json`; a relative `./plugins/...` entry is resolved from the global
-config, not from the project folder.
+If you prefer an absolute path, point `plugins` at the installed copy, for example
+`["C:/Users/<you>/.config/opencode/plugins/arena-field"]` or
+`["/home/<you>/.config/opencode/plugins/arena-field"]`. On OpenCode builds that
+include the plugin command, `opencode plugin add "/path/to/opencode-arena"`
+installs the source clone instead, which is fine for development.
+
+For one project only, use the absolute path to the installed copy in that
+project's `opencode.json`; a relative `./plugins/...` entry is resolved from the
+global config, not from the project folder.
 
 The plugin registers `arena`, `arena_bus`, `arena_fs`, `arena_git`, `arena_exec`,
 `arena_job` and `arena_spawn` for every agent that may use tools. **No agent file is required.** Any primary agent (`build`, `plan`,
 `uncensored`, ...) can call `arena` with `action: "start"`; there is no
 `arena-orchestrator` to select.
 
-Optionally install the skill so the natural-language trigger is discoverable:
+The setup script already copies the skill so the natural-language trigger is
+discoverable. To refresh it manually:
 
 ```powershell
 # Windows PowerShell
@@ -148,10 +148,11 @@ cp -R skills/arena "$HOME/.config/opencode/skills/"
 Restart OpenCode. The tools appear for agents that may use tools. The Arena tab
 appears in the desktop side panel after the app reloads the plugin.
 
-Everything is built from this folder: `src/`, `bun run build:gui` for
-`dist/gui-experimental.cjs`, `skills/arena`, `docs/`, `test/`, `package.json` and
-`bun.lock`. There is no separate agent package or service to install, and no MCP
-server or container is required.
+The source builds a self-contained copy: `src/`, `skills/arena`, `package.json`,
+`bun.lock`, and `bun run build:gui` for `dist/gui-experimental.cjs`. The setup
+script copies those runtime files into OpenCode and installs/builds them there.
+There is no separate agent package or service to install, and no MCP server or
+container is required.
 
 ## Ask for an arena in plain language
 

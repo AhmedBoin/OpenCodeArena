@@ -200,12 +200,14 @@ Arena is a plugin, not a standalone model server. The folder does not contain:
 - **Any MCP server, browser tool, Python package or Docker container.** Arena needs
   none of them. With `toolPolicy: "all"`, a seat can use whatever tools the host
   exposes, but that is the host's toolbox, not an Arena dependency.
-- **The built GUI file in git.** `bun run build:gui` creates
-  `dist/gui-experimental.cjs`. The core tools and the room work without the tab.
+- **The built GUI file in git.** The setup script runs `bun run build:gui` inside
+  the installed copy and creates `dist/gui-experimental.cjs` there. The core tools
+  and the room work without the tab.
 
-Everything the Arena plugin itself needs is in this repo: `src/`, `test/`,
-`skills/arena/`, `package.json`, `bun.lock`, `vite.config.ts`, `tsconfig.json` and
-the docs.
+Everything the Arena plugin itself needs is in this repo. The setup script copies
+the runtime into OpenCode at `~/.config/opencode/plugins/arena-field`, installs its
+dependencies and builds the tab there. The clone is the source, not the runtime;
+moving or deleting the clone does not break the installed copy.
 
 ## Where the code lives
 

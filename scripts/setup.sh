@@ -2,7 +2,7 @@
 set -euo pipefail
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-echo "Arena repo: $repo"
+echo "Arena source: $repo"
 
 if ! command -v bun >/dev/null 2>&1; then
   echo "Bun is not on PATH. Install it from https://bun.sh and run this script again." >&2
@@ -13,31 +13,46 @@ if ! command -v opencode >/dev/null 2>&1; then
   echo "OpenCode is not on PATH. Arena is a plugin and needs an OpenCode 2.2+ host." >&2
 fi
 
-cd "$repo"
-echo "Installing dependencies..."
-bun install
-echo "Building the Arena tab..."
-bun run build:gui
-
 config="${XDG_CONFIG_HOME:-$HOME/.config}/opencode"
 plugins="$config/plugins"
 skills="$config/skills"
 mkdir -p "$plugins" "$skills"
 
-link="$plugins/arena-field"
-if [ -e "$link" ] && [ ! -L "$link" ]; then
-  echo "$link already exists and is not a link. Rename or remove it, then run this script again." >&2
-  exit 1
+install="$plugins/arena-field"
+if [ -L "$install" ]; then
+  rm "$install"
+elif [ -e "$install" ]; then
+  rm -rf "$install"
 fi
-ln -sfn "$repo" "$link"
+if [ -e "$install" ]; then
+  mkdir -p "$config/arena-install-backups"
+  backup="$config/arena-install-backups/arena-field-$(date +%Y%m%d%H%M%S)"
+  mv "$install" "$backup"
+  echo "The old install could not be removed and was moved to $backup" >&2
+fi
 
-cp -R "$repo/skills/arena" "$skills/"
+mkdir -p "$install"
+for name in src skills package.json bun.lock vite.config.ts tsconfig.json; do
+  if [ -e "$repo/$name" ]; then
+    cp -R "$repo/$name" "$install/"
+  fi
+done
+
+cd "$install"
+echo "Installing dependencies in the OpenCode copy..."
+bun install
+echo "Building the Arena tab in the OpenCode copy..."
+bun run build:gui
+
+cp -R "$install/skills/arena" "$skills/"
 
 echo
-echo "Plugin linked at: $link"
-echo "Skill copied to:  $skills/arena"
+echo "Plugin installed at: $install"
+echo "Source repo:        $repo (not used at runtime)"
+echo "This is a real copy, not a link to the source folder."
+echo "To update: git pull in the source, then run this script again."
 echo
 echo "Add this entry to $config/opencode.json:"
 echo '  "plugins": ["./plugins/arena-field"]'
 echo
-echo "Restart OpenCode. The arena tools and the Arena tab will load with the host."
+echo "Restart OpenCode. The arena tools and the Arena tab will load from the OpenCode copy."
