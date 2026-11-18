@@ -3,6 +3,7 @@ import { OpenCode } from "@opencode/client"
 import { MenuItem, Panel, Plugin } from "@opencode/plugin/gui"
 import type { IpcClient, IpcProvider, MountedSession, PanelProps } from "@opencode/plugin/gui"
 import { ArenaBridge, ArenaRpc, type BridgeState, type SendRequest, type WatchRequest } from "./gui-contract.ts"
+import { arenaRunToOpen } from "./gui-open.ts"
 import type { Attachment, RoomMessage, RoomParticipant } from "./types.ts"
 
 function asText(value: unknown, fallback = ""): string {
@@ -699,6 +700,28 @@ export default Plugin.define({
       mobile: { title: "Arena", order: 1, kind: "tab", icon: "speech-bubble", cached: true },
       list: () => [{ id: "room", title: "Arena", tabbable: true, closable: "compact" as const }],
       render: (props: PanelProps) => <ArenaChat bridge={bridge} session={props.session} />,
+    })
+
+    // Starting a field opens its room without a menu click. Watch the current
+    // session through the same bridge the panel uses, then open the Arena tab
+    // once per live run. A manual close is respected, and a new run opens again.
+    const [watched, setWatched] = createSignal("")
+    const opened = new Set<string>()
+    createEffect(() => {
+      const session = ctx.sessions.current()
+      const key = session ? `${session.server.id}:${session.id}` : ""
+      if (!session || key === watched()) return
+      setWatched(key)
+      void bridge.watch({ serverID: session.server.id, sessionID: session.id }).catch(() => undefined)
+    })
+    createEffect(() => {
+      const session = ctx.sessions.current()
+      const state = bridge.state() as BridgeState | undefined
+      const key = session ? `${session.server.id}:${session.id}` : ""
+      const openedKey = session ? arenaRunToOpen({ sessionID: session.id, key, watched: watched(), field: state?.field }) : undefined
+      if (!openedKey || opened.has(openedKey)) return
+      opened.add(openedKey)
+      open(session)
     })
   },
   main(ctx) {
