@@ -2,6 +2,10 @@
   "name": "arena",
   "version": "0.5.0",
   "description": "Continuous multi-agent Arena field for OpenCode: named peers, a shared safe-point bus, permanent leave seals, and a verification-gated claim",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AhmedBoin/OpenCodeArena.git"
+  },
   "type": "module",
   "module": "src/plugin.ts",
   "private": true,

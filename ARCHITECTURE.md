@@ -242,7 +242,8 @@ moving or deleting the clone does not break the installed copy.
 
 ## Read next
 
-- [README.md](README.md) for install, tools, the command and the settings.
+- [README.md](README.md) for the short install and a usage example.
+- [GUIDE.md](GUIDE.md) for the full command, tool and settings reference.
 - [docs/architecture.md](docs/architecture.md) for the host-neutral design and the
   tick loop.
 - [docs/field-design.md](docs/field-design.md) for the state card, gate, leases,
