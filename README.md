@@ -9,6 +9,7 @@ No rounds. No phases. No judge scoreboard.
 ## What it does
 
 - Turns one OpenCode session into a team of child agents.
+- Opens the Arena tab automatically when a field starts.
 - Gives every seat a name, a role, a brief, and one shared room.
 - Keeps facts, tests, results, dead ends and claims in a typed bus.
 - Uses a state card and leases so agents do not collide.

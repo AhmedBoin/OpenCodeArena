@@ -13,6 +13,8 @@ with a diagram, the cast and a full run walkthrough.
 
 ## What it does
 
+- **The tab follows the work.** Starting a field opens the Arena tab; a manual
+  close stays closed, and a new run opens it again.
 - **A crew of perspectives, not task slices.** The main agent writes the crew on
   the fly: a real first name per agent, a perspective that fits this problem, and
   a personality brief. Names, perspectives and count are not fixed; if the user
